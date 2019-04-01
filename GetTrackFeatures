@@ -42,12 +42,13 @@ tracks_id <- lapply(tracks, "[", 16)
 sad_id <- unlist(tracks_id, use.names = F) # list with all track ID's
 
 
-# Get the tracks variable  from the playlist - test
+# Get the tracks variable  from the playlist - works
 
-print(sad_id);
-#sad_data <- data.frame(x = rnorm(1000), y = runif(18))
-for (i in sad_id) { # access the list 
-  for (j in i) { # access the second list /  
+sad_data <- ''
+
+for (i in sad_id) { # acess the first list 
+  for (j in i) { # acess the second list 
     n <-  get_track_audio_features(j)
-    print(n) # I am working here will use rbind probably to create the actual Data frame with all tracks variables
+    sad_data <- rbind(data.frame(n), sad_data)
+  }
 }
