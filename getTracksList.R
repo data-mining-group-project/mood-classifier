@@ -5,8 +5,8 @@
 
 
 ## Change the following parameters 
-playlistID <- "5sjzvvlQ5CYz0b7d36Wroz"
-playlistSize <- 280
+playlistID <- "7vZuDT5TEpvzx72XCwpevN"
+playlistSize <- 3445
 
 
 ## Looping to get all the songs
@@ -24,4 +24,6 @@ for (i in 0:((playlistSize-1) %/% 100)) {
 }
 
 playlistTrack
+
+
 
