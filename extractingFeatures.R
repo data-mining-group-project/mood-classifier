@@ -24,7 +24,7 @@ playlistSize <- playlist$tracks$total
 
 features <- NULL
 playlistTrack <- NULL
-for (i in 0:max(2,((playlistSize-1) %/% 100))) {
+for (i in 0:min(9,((playlistSize-1) %/% 100))) {
   playlistTrackTemp <- get_playlist_tracks(playlistID, fields = NULL, limit = 100,
                                            offset = (i*100),  market = NULL,
                                            authorization = get_spotify_access_token(),
@@ -41,5 +41,5 @@ for (i in 0:max(2,((playlistSize-1) %/% 100))) {
   playlistTrack <- rbind(playlistTrackTemp, playlistTrack)
   #Sys.sleep(1)
 }
-
+## 1 minute 30 seconds to process 1000 songs. Error 429 isn't blocking
 features
