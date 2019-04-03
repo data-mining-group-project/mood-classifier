@@ -6,9 +6,10 @@
 #################################################
 
 
-## CHANGE THE FOLLOWING PARAMETER##########
+## CHANGE THE FOLLOWING PARAMETERS#########
                                           #
 playlistID <- "2IZSOqDOyshh1thqoJ4pLi"    #
+filename <- "featuresHappy.csv"           #
                                           #
 ###########################################
 
@@ -17,6 +18,7 @@ playlistID <- "2IZSOqDOyshh1thqoJ4pLi"    #
 # Getting the size of the playlist
 playlist <- get_playlist(playlistID)
 playlistSize <- playlist$tracks$total
+print(paste("Number of songs in the playlist: ",playlistSize))
 
 
 ## Looping to get all the songs of the playlist, as we can only import 100 track 
@@ -43,3 +45,6 @@ for (i in 0:min(9,((playlistSize-1) %/% 100))) {
 }
 ## 1 minute 30 seconds to process 1000 songs. Error 429 isn't blocking
 features
+
+## Saving in csv
+write.csv(features, file = filename, sep = ",", col.names = TRUE)
