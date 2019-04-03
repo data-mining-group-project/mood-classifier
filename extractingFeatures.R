@@ -18,7 +18,7 @@ filename <- "featuresHappy.csv"           #
 # Getting the size of the playlist
 playlist <- get_playlist(playlistID)
 playlistSize <- playlist$tracks$total
-print(paste("Number of songs in the playlist: ",playlistSize))
+cat("Number of songs in the playlist: ",playlistSize)
 
 
 ## Looping to get all the songs of the playlist, as we can only import 100 track 
