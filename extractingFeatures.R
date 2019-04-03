@@ -47,4 +47,4 @@ for (i in 0:min(9,((playlistSize-1) %/% 100))) {
 features
 
 ## Saving in csv
-write.csv(features, file = filename, sep = ",", col.names = TRUE)
+write.csv(features, file = filename)
