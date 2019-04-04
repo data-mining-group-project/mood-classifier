@@ -26,7 +26,7 @@ cat("Number of songs in the playlist: ",playlistSize)
 
 features <- NULL
 playlistTrack <- NULL
-for (i in 0:min(9,((playlistSize-1) %/% 100))) {
+for (i in 13:min(15,((playlistSize-1) %/% 100))) {
   playlistTrackTemp <- get_playlist_tracks(playlistID, fields = NULL, limit = 100,
                                            offset = (i*100),  market = NULL,
                                            authorization = get_spotify_access_token(),
@@ -36,7 +36,9 @@ for (i in 0:min(9,((playlistSize-1) %/% 100))) {
   playlistTrackTemp <- playlistTrackTemp$track.id
   featuresTmp <- NULL
   for(j in playlistTrackTemp) { 
-    featuresTmp <- bind_rows(get_track_audio_features(j)[c(1:11,17)], featuresTmp)
+    if (!is.na(j)) {
+      featuresTmp <- bind_rows(get_track_audio_features(j)[c(1:11,17)], featuresTmp)
+    }
   }
   # binding all the features together
   features <- bind_rows(features, featuresTmp)
