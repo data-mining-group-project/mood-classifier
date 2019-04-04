@@ -61,4 +61,8 @@ sad_test[duplicated(sad_test$id), ]
 
 sad_variables <- sad_final %>% 
   select(id, danceability, energy, key, loudness, mode, speechiness, acousticness, instrumentalness,
-         liveness, valence, tempo)
+         liveness, valence, tempo, duration_ms)
+
+# ADD label 
+
+sad_variables$label <- 0
