@@ -1,24 +1,27 @@
-#################################################
-## This script return all the track's IDs of   ##
-## a playlist of more than 100 tracks          ##
-## then get all the features needed for the    ##
-## project in the parameter feature            ##
-#################################################
+##################################################################
+## This script return all the track's IDs, features and         ##
+## chosen label for a playlist of more than 100 tracks          ##
+## Then export in a CSV file                                    ##
+## More information:                                            ##
+## https://github.com/data-mining-group-project/mood-classifier ##
+##################################################################
 
 
-## CHANGE THE FOLLOWING PARAMETERS#########
-                                          #
-playlistID <- "2IZSOqDOyshh1thqoJ4pLi"    #
-filename <- "featuresHappy.csv"           #
-                                          #
-###########################################
+## CHANGE THE FOLLOWING PARAMETERS#################################
+                                                                  #
+playlistID <- "2IZSOqDOyshh1thqoJ4pLi"                            #
+filename <- "featuresHappy.csv"        # File to save the dataset #
+label <- 1                             # Label for classification # 
+maxTracksNb <- 5000                 # max nb of tracks to extract #
+                                                                  #
+###################################################################
 
 
 
 # Getting the size of the playlist
 playlist <- get_playlist(playlistID)
 playlistSize <- playlist$tracks$total
-cat("Number of songs in the playlist: ",playlistSize)
+cat("Number of songs in the playlist: ", playlistSize,"\n")
 
 
 ## Looping to get all the songs of the playlist, as we can only import 100 track 
@@ -26,7 +29,8 @@ cat("Number of songs in the playlist: ",playlistSize)
 
 features <- NULL
 playlistTrack <- NULL
-for (i in 0:min(9,((playlistSize-1) %/% 100))) {
+timeStart <- Sys.time()
+for (i in 0:min((maxTracksNb - 1) %/% 100,((playlistSize - 1) %/% 100))) {
   playlistTrackTemp <- get_playlist_tracks(playlistID, fields = NULL, limit = 100,
                                            offset = (i*100),  market = NULL,
                                            authorization = get_spotify_access_token(),
@@ -36,15 +40,23 @@ for (i in 0:min(9,((playlistSize-1) %/% 100))) {
   playlistTrackTemp <- playlistTrackTemp$track.id
   featuresTmp <- NULL
   for(j in playlistTrackTemp) { 
-    featuresTmp <- bind_rows(get_track_audio_features(j)[c(1:11,17)], featuresTmp)
+      # ignoring na lines
+      if (!is.na(j)) {
+      names(j) <- "id"
+      names(label) <- "label"
+      featuresTmp <- bind_rows(c(j,get_track_audio_features(j)[c(1:11,17)],label), 
+                               featuresTmp)
+      # print(featuresTmp)
+    }
   }
   # binding all the features together
   features <- bind_rows(features, featuresTmp)
   playlistTrack <- rbind(playlistTrackTemp, playlistTrack)
-  #Sys.sleep(1)
 }
 ## 1 minute 30 seconds to process 1000 songs. Error 429 isn't blocking
-features
+timeElapsed <- as.numeric(Sys.time() - timeStart, units = "secs")
+cat("Processed", playlistSize, "rows in", timeElapsed %/% 60, "minutes and",
+    timeElapsed %% 60, "seconds\n")
 
 ## Saving in csv
 write.csv(features, file = filename)
