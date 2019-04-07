@@ -16,7 +16,8 @@ maxTracksNb <- 5000                 # max nb of tracks to extract #
                                                                   #
 ###################################################################
 
-
+library(spotifyr)
+library(dplyr)
 
 # Getting the size of the playlist
 playlist <- get_playlist(playlistID)
