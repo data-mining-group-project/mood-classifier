@@ -23,3 +23,7 @@ N <- features[-c(2,7)]
 cor_N <- cor(N[,unlist(lapply(N, is.numeric))], use = 'complete.obs')
 #Plot correlation
 corrplot(cor_N, type = "upper")
+#New csv without highly correlated features
+songs_variables <-  songs_features[-c(5,10)]
+#Write new csv
+write.csv(songs_variables, "features.csv")
