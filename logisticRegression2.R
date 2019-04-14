@@ -24,7 +24,7 @@ mod_fit <- train(label ~ danceability + key + loudness + mode + speechiness + in
 predictions <- predict(mod_fit, testing[, -11])
 table(predictions, testing[, 11])
 
-# p = 0.8 -> 74.60 % correct
+# p = 0.6 -> 74.60 % correct
 # predictions    0    1
 #           0 1461  468
 #           1  312  830
@@ -33,9 +33,6 @@ table(predictions, testing[, 11])
 # predictions   0   1
 #           0 728 241
 #           1 158 408
-
-
-
 
 
 
