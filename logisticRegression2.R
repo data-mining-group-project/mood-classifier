@@ -14,15 +14,18 @@ reducedSongFeatures <- reducedSongFeatures %>% drop_na()
 reducedSongFeatures$label <- as.factor(reducedSongFeatures$label)
 
 
-
+# Partitioning the dataset in training and testing
 Train <- createDataPartition(reducedSongFeatures$label, p = 0.8, list = FALSE) 
 training <- reducedSongFeatures[Train, ]
 testing <- reducedSongFeatures[-Train, ]
-mod_fit <- train(label ~ danceability + key + loudness + mode + speechiness + instrumentalness + 
-                   liveness + valence + tempo + duration_ms, data = training, method = "glm",
+
+# training the model
+mod_fit <- train(label ~ ., data = training, method = "glm",
                  family = "binomial")
-predictions <- predict(mod_fit, testing[, -11])
-table(predictions, testing[, 11])
+
+# testing the model
+predictions <- predict(mod_fit, testing[,-which(colnames(testing)=="label")])
+table(predictions, testing[, which(colnames(testing)=="label")])
 
 # p = 0.6 -> 74.60 % correct
 # predictions    0    1
