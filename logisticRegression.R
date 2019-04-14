@@ -1,50 +1,42 @@
+library(caret)
 
-# Examine the dataset to identify potential independent variables
-str(reducedSongFeatures)
 
-# removing lines with NA
-library(tidyr)
+# Removing NAs
 reducedSongFeatures <- reducedSongFeatures %>% drop_na()
 
-# Explore the dependent variable
-table(reducedSongFeatures$label)
 
-# Build the donation model
-moodModel <- glm(label ~ danceability + key + loudness + mode + speechiness + 
-                   instrumentalness + liveness + valence + tempo + duration_ms, 
-                         data = reducedSongFeatures, family = "binomial")
+# We need to change label as a 2 level factor, or we get the following warning message: 
+# Warning message:
+# In train.default(x, y, weights = w, ...) :
+#  You are trying to do regression and your outcome only has two possible values 
+# Are you trying to do classification? If so, use a 2 level factor as your outcome column.
 
-# Summarize the model results
-summary(moodModel)
-str(moodModel)
-test <- predict(moodModel, type = "response")
-str(test)
+reducedSongFeatures$label <- as.factor(reducedSongFeatures$label)
 
-# Estimate the happiness probability
-reducedSongFeatures$moodProb <- predict(moodModel, type = "response")
 
-# Find the donation probability of the average prospect
-mean(reducedSongFeatures$label)
+# Partitioning the dataset in training and testing
+Train <- createDataPartition(reducedSongFeatures$label, p = 0.8, list = FALSE) 
+training <- reducedSongFeatures[Train, ]
+testing <- reducedSongFeatures[-Train, ]
 
-# Predict a donation if probability of donation is greater than average
-reducedSongFeatures$moodPred <- ifelse(reducedSongFeatures$moodProb > 0.4225, 1, 0)
+# training the model
+mod_fit <- train(label ~ ., data = training, method = "glm",
+                 family = "binomial")
 
-# Calculate the model's accuracy
-mean(reducedSongFeatures$label == reducedSongFeatures$moodPred)
-# [1] 0.746842
+# testing the model
+predictions <- predict(mod_fit, testing[,-which(colnames(testing)=="label")])
+table(predictions, testing[, which(colnames(testing)=="label")])
 
-## CALCULATING ROC CURVE AND AUC
+# p = 0.6 -> 74.60 % correct
+# predictions    0    1
+#           0 1461  468
+#           1  312  830
 
-# Load the pROC package
-install.packages("pROC")
-library(pROC)
+# p = 0.8 -> 74.00 % correct
+# predictions   0   1
+#           0 728 241
+#           1 158 408
 
-# Create a ROC curve
-ROC <- roc(reducedSongFeatures$label, reducedSongFeatures$moodPred)
 
-# Plot the ROC curve
-plot(ROC, col = "blue")
 
-# Calculate the area under the curve (AUC)
-auc(ROC)
-#Area under the curve: 0.7445
+
