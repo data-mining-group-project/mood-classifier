@@ -37,6 +37,10 @@ table(predictions, testing[, which(colnames(testing)=="label")])
 #           0 728 241
 #           1 158 408
 
+# saving the model
+
+saveRDS(object = mod_fit, file = "files/mod_log_regression.rds")
+
 
 
 
