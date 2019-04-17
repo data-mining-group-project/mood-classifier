@@ -16,8 +16,8 @@ server <- function(input, output) {
       Sys.setenv(SPOTIFY_CLIENT_ID = '9911fb0ae7754159b26b9f120edf02f9')
       Sys.setenv(SPOTIFY_CLIENT_SECRET = 'a201b267bf23439a8f6f2dce5e77c102')
       access_token <- get_spotify_access_token()
-      #modLR <- readRDS(file = "files/mod_log_regression.rds")
-      modLR <- readRDS(file = "./mod_log_regression.rds")
+      modLR <- readRDS(file = "files/mod_log_regression.rds")
+      #modLR <- readRDS(file = "./mod_log_regression.rds")
       songURL <- input$song
       temp <- sub(".*:", "", songURL)
       temp <- sub(".*/", "", temp)
@@ -26,7 +26,7 @@ server <- function(input, output) {
       songArtist <- get_track(songID)$artists$name
       songMoodPredictLR <- predict(modLR, get_track_audio_features(songID)[-c(12:16, 18)])
       if(songMoodPredictLR == 1){
-        mood <- "Happy :)"
+        mood <- cat("the song '", songTitle, "' from", songArtist, "is Happy :)")
       } else{
         mood <- "Sad :("
       }
