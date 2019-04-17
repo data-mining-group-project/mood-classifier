@@ -28,6 +28,7 @@ cat("Number of songs in the playlist: ", playlistSize,"\n")
 ## Looping to get all the songs of the playlist, as we can only import 100 track 
 ## at the time. offset allow us to set the first song to import.
 
+cat("Exctracting data, please wait...")
 features <- NULL
 playlistTrack <- NULL
 timeStart <- Sys.time()
@@ -61,3 +62,4 @@ cat("Processed", playlistSize, "rows in", timeElapsed %/% 60, "minutes and",
 
 ## Saving in csv
 write.csv(features, file = filename)
+

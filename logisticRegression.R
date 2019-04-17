@@ -1,4 +1,5 @@
 library(caret)
+library(tidyr)
 
 
 # Removing NAs
@@ -24,8 +25,8 @@ mod_fit <- train(label ~ ., data = training, method = "glm",
                  family = "binomial")
 
 # testing the model
-predictions <- predict(mod_fit, testing[,-which(colnames(testing)=="label")])
-table(predictions, testing[, which(colnames(testing)=="label")])
+predictionsLR <- predict(mod_fit, testing[,-which(colnames(testing)=="label")])
+table(predictionsLR, testing[, which(colnames(testing)=="label")])
 
 # p = 0.6 -> 74.60 % correct
 # predictions    0    1

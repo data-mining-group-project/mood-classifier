@@ -1,3 +1,6 @@
+library(lattice)
+library(ggplot2)
+
 ## Subsetting to keep only the features that we want to test for correlation
 
 corFeatures <- cor(songFeatures[-c(1,2,15)], method = c("pearson", "kendall", "spearman"), 
