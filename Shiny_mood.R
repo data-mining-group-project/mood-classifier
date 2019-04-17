@@ -1,7 +1,7 @@
 #shinyapp
 library(shiny)
 library(spotifyr)
-ui <- fluidPage(   titlePanel("Mood Classifier"),
+ui <- fluidPage(titlePanel("Mood Classifier"),
                    
   sidebarLayout(
     sidebarPanel( textInput(inputId = "song", label = "Enter Song URL"),
@@ -11,13 +11,12 @@ ui <- fluidPage(   titlePanel("Mood Classifier"),
 )
 )
 server <- function(input, output) {
-  text_reactive <- eventReactive(input$submit, {
-    runif(input$song)
-  })
-  output$mood <- renderText({
+  text_reactive <- observeEvent(input$submit, {
+output$mood <- renderText({
     Sys.setenv(SPOTIFY_CLIENT_ID = '9911fb0ae7754159b26b9f120edf02f9')
     Sys.setenv(SPOTIFY_CLIENT_SECRET = 'a201b267bf23439a8f6f2dce5e77c102')
     access_token <- get_spotify_access_token()
+    #modLR <- readRDS(file = "files/mod_log_regression.rds")
     modLR <- readRDS(file = "./mod_log_regression.rds")
     songURL <- input$song
     temp <- sub(".*:", "", songURL)
@@ -32,5 +31,6 @@ server <- function(input, output) {
     mood <- "Sad :("
   }
  #cat("the song '", songTitle, "' from", songArtist, "is", mood)
- })}
+}) })}
 shinyApp(ui = ui, server = server)
+
