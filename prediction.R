@@ -36,9 +36,9 @@ if(songMoodPredictNN == 1){
 }
 
 if(songMoodPredictRF == 1){
-  moodNN <- "happy"
+  moodRF <- "happy"
 } else{
-  moodNN <- "sad"
+  moodRF <- "sad"
 }
 
 cat("According to Logistic regression, the song '", songTitle, "' from", songArtist, "is", mood)
