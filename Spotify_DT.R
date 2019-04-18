@@ -1,5 +1,7 @@
 # Final Data 
 
+library(dplyr)
+
 Spotify_mood <- read.csv(file = "songFeatures.csv", header = TRUE, sep = ",")
 Spotify <- Spotify_mood %>%
   na.omit() %>% # exclude 26 NA
@@ -24,12 +26,11 @@ library(rpart.plot)
 set.seed(345)
 N <- nrow(Spotify)
 spotify_train <- sample(1:N,size=0.80*N)
-spotify_train <- sort(indtrain)
-spotify_test <- setdiff(1:N,indtrain)
+spotify_train <- sort(spotify_train)
+spotify_test <- setdiff(1:N,spotify_train)
 
 #Fit a classifier to only the training data
-spotify_model <- rpart(label~.,data=Spotify,  subset=spotify_train, method = "class",
-                       control = rpart.control(cp = 0))
+spotify_model <- rpart(label~.,data=Spotify,  subset=spotify_train, method = "class")
 rpart.plot(fit.r, type = 5, box.palette = c("red", "green"), fallen.leaves = TRUE)
 plot(as.party(spotify_model))
 
@@ -59,9 +60,3 @@ training_matrix
 sum(diag(training_matrix))/sum(training_matrix)
 
  
-
-# Option 2 Data Camp
-
-spot.tree <- tree(label~., data = Spotify)
-plot(spot.tree)
-text(spot.tree, pretty = 0)
