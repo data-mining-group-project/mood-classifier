@@ -2,20 +2,9 @@ library(caret)
 library(tidyr)
 
 
-# Removing NAs
-reducedSongFeatures <- reducedSongFeatures %>% drop_na()
-
-
-# We need to change label as a 2 level factor, or we get the following warning message: 
-# Warning message:
-# In train.default(x, y, weights = w, ...) :
-#  You are trying to do regression and your outcome only has two possible values 
-# Are you trying to do classification? If so, use a 2 level factor as your outcome column.
-
-reducedSongFeatures$label <- as.factor(reducedSongFeatures$label)
-
 
 # Partitioning the dataset in training and testing
+set.seed(1)
 Train <- createDataPartition(reducedSongFeatures$label, p = 0.8, list = FALSE) 
 training <- reducedSongFeatures[Train, ]
 testing <- reducedSongFeatures[-Train, ]
@@ -28,15 +17,14 @@ mod_fit <- train(label ~ ., data = training, method = "glm",
 predictionsLR <- predict(mod_fit, testing[,-which(colnames(testing)=="label")])
 table(predictionsLR, testing[, which(colnames(testing)=="label")])
 
-# p = 0.6 -> 74.60 % correct
-# predictions    0    1
-#           0 1461  468
-#           1  312  830
+# OR
+confusionMatrix(reference = testing$label, data = predictionsLR, mode='everything', 
+                positive='1')
 
-# p = 0.8 -> 74.00 % correct
-# predictions   0   1
-#           0 728 241
-#           1 158 408
+
+# predictionsLR   0   1
+#              0 665 197
+#              1 221 725
 
 # saving the model
 
@@ -59,6 +47,7 @@ plot(ROC, col = "blue")
 # Calculate the area under the curve (AUC)
 auc(ROC)
 #Area under the curve: 0.7648
+
 
 
 
