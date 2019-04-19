@@ -6,13 +6,13 @@ library(tree)
 
 set.seed(2)
 R<-nrow(Spotify)
-S_train <-sample(1:N,size=0.75*R)
+S_train <-sample(1:R,size=0.75*R)
 RF_train <- Spotify[S_train, ]
 RF_test <- Spotify[- S_train, ] 
 
 
 fit <- randomForest(label ~ ., data = RF_train)
-varImpPlot(fit)
+varImpPlot(fit, pch = 18 , col = "blue", cex = 1, main = "Features Importance")
 plot(fit)
 
 err <- fit$err.rate
