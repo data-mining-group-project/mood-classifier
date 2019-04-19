@@ -18,6 +18,7 @@ songArtist <- get_track(songID)$artists$name
 
 songMoodPredictLR <- predict(modLR, get_track_audio_features(songID)[-c(12:16, 18, hc)])
 songMoodPredictNN <- predict(nnetMood, get_track_audio_features(songID)[-c(12:16, 18, hc)])
+songMoodPredictMars <- predict(marsMod, get_track_audio_features(songID)[-c(12:16, 18, hc)])
 
 library(randomForest)
 songMoodPredictRF <- predict(modRF, newdata = get_track_audio_features(songID)[-c(12:16, 18)] , 
@@ -36,11 +37,18 @@ if(songMoodPredictNN == 1){
 }
 
 if(songMoodPredictRF == 1){
-  moodNN <- "happy"
+  moodRF <- "happy"
 } else{
-  moodNN <- "sad"
+  moodRF <- "sad"
+}
+
+if(songMoodPredictMars == 1){
+  moodMars <- "happy"
+} else{
+  moodMars <- "sad"
 }
 
 cat("According to Logistic regression, the song '", songTitle, "' from", songArtist, "is", mood)
 cat("\nAccording to Neural Network, the song '", songTitle, "' from", songArtist, "is", moodNN)
-cat("\nAccording to Random Forest, the song '", songTitle, "' from", songArtist, "is", moodNN)
+cat("\nAccording to Random Forest, the song '", songTitle, "' from", songArtist, "is", moodRF)
+cat("\nAccording to Multivariate Adaptive Regression Splines (MARS), the song '", songTitle, "' from", songArtist, "is", moodMars)

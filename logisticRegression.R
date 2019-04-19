@@ -43,5 +43,22 @@ table(predictionsLR, testing[, which(colnames(testing)=="label")])
 saveRDS(object = mod_fit, file = "files/mod_log_regression.rds")
 
 
+## CALCULATING ROC CURVE AND AUC
+
+# Load the pROC package
+# install.packages("pROC")
+library(pROC)
+
+
+# Create a ROC curve
+ROC <- roc(as.numeric(testing[, which(colnames(testing)=="label")]), as.numeric(predictionsLR))
+
+# Plot the ROC curve
+plot(ROC, col = "blue")
+
+# Calculate the area under the curve (AUC)
+auc(ROC)
+#Area under the curve: 0.7648
+
 
 
