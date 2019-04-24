@@ -5,8 +5,8 @@ library(lubridate)
 library(dplyr)
 
 
-Sys.setenv(SPOTIFY_CLIENT_ID = '54afff26d9b64a81910ec809527fb44e')
-Sys.setenv(SPOTIFY_CLIENT_SECRET = 'fe33f207fe174cb7923a86c8ac0f20b1')
+Sys.setenv(SPOTIFY_CLIENT_ID = 'x')
+Sys.setenv(SPOTIFY_CLIENT_SECRET = 'x')
 
 access_token <- get_spotify_access_token
 
